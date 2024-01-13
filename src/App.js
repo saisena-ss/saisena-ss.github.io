@@ -5,17 +5,17 @@ import About from './components/About';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
-
+import {Grid} from '@mui/material';
 function App() {
 
   return (
-    <div>
+    <Grid>
         <Navbar/>
         <About/>
         <Experience/>
         <Skills/>
         <Projects/>
-    </div>
+    </Grid>
   );
 }
 

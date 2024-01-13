@@ -6,6 +6,22 @@ import '../App.css';
 
 const Navbar = () => {
 
+  const handleScrollToElement = (elementId) => {
+    // Assuming AppBar height is 64px
+    const offset = 64;
+  
+    const element = document.getElementById(elementId);
+    if (element) {
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+  
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
+
     const linkStyle = {
         margin: '0 10px', // Add margin for spacing between links
         color: 'inherit', // Inherit the text color
@@ -33,16 +49,17 @@ const Navbar = () => {
 
     if (aboutElement && experienceElement && skillsElement && projectsElement) {
       const aboutPosition = aboutElement.offsetTop;
-      const experiencePosition = experienceElement.offsetTop;
-      const skillsPosition = skillsElement.offsetTop;
-      const projectsPosition = projectsElement.offsetTop;
+      const experiencePosition = experienceElement.offsetTop-200;
+      const skillsPosition = skillsElement.offsetTop-200;
+      const projectsPosition = projectsElement.offsetTop-200;
 
       console.log('About position:', aboutPosition);
       console.log('Experience position:', experiencePosition);
       console.log('Skills position:', skillsPosition);
       console.log('Projects position:', projectsPosition);
       console.log(scrollPosition);
-
+      
+      
       if (
         scrollPosition < experiencePosition
       ) {
@@ -86,7 +103,7 @@ const Navbar = () => {
           Sai Sena
         </Typography>
         <Link
-          to="about"
+          onClick={() => handleScrollToElement('about')}
           spy={true}
           smooth={true}
           duration={500}
@@ -95,7 +112,7 @@ const Navbar = () => {
           About
         </Link>
         <Link
-          to="experience"
+          onClick={() => handleScrollToElement('experience')}
           spy={true}
           smooth={true}
           duration={500}
@@ -106,7 +123,7 @@ const Navbar = () => {
           Experience
         </Link>
         <Link
-          to="skills"
+          onClick={() => handleScrollToElement('skills')}
           spy={true}
           smooth={true}
           duration={500}
@@ -117,7 +134,7 @@ const Navbar = () => {
           Skills
         </Link>
         <Link
-          to="projects"
+          onClick={() => handleScrollToElement('projects')}
           spy={true}
           smooth={true}
           duration={500}

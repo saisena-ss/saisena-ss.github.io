@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Grid } from '@mui/material';
 import { Element } from 'react-scroll';
 
-const Experience = () => {
+const Experience = () => {  
   // Array of experience objects for demonstration
   const experiences = [
     {
@@ -50,7 +50,7 @@ const Experience = () => {
 
   return (
     <Element name="experience" id="experience" className="element">
-      <Box component="section" sx={{ pt: '50px', pb: '5px', px: 10 }}>
+      <Box component="section" sx={{ pt: '20px', pb: '5px', px: 10 }}>
         <Typography variant="h4" component="h4" gutterBottom style={{ fontWeight: 'bold', textAlign: 'left', color: '#43a88a'}}>
           Experience
         </Typography>

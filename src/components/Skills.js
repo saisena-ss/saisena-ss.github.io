@@ -17,7 +17,7 @@ const Skills = () => {
           category: 'Data Science and ML',
           skills: [{name:'Statistics'},{name:' Statistical and Predictive Modelling'},{name:'Machine Learning'},{name:'Deep Learning'},
           {name:'Keras'},{name:'Tensorflow'},{name:'PyTorch'},{name:'Computer Vision'},{name:'Natural Language Processing (NLP)'},
-          {name:'LLM'},{name:'Topic Modelling'},{name:'Transformers'}],
+          {name:'LLM'},{name:'Topic Modelling'},{name:'Transformers'},{name:'Generative AI'}],
         },
         // Add more categories and skills as needed
       ];
@@ -30,7 +30,7 @@ const Skills = () => {
 
   return (
     <Element name="skills" id="skills" className="element"> {/* Use the Element component to wrap your section */}
-        <Box component="section" sx={{ pt: '50px', pb: '5px', px: 10 }}>
+        <Box component="section" sx={{ pt: '20px', pb: '5px', px: 10 }}>
       <Typography variant="h4" gutterBottom style={{ fontWeight: 'bold', textAlign: 'left', color: '#43a88a' }}>
         Skills
       </Typography>

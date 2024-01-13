@@ -25,6 +25,17 @@ const Projects = () => {
   
   const projects = [
     {
+      name: 'Weighted Grouped Query Attention',
+      description: `The Transformer architecture forms the foundation of large language models. However, with increasing 
+      demands for scaling and constraints of hardware memory, the inference costs of these models remain high. To address these 
+      challenges, Multi Query Attention (MQA) and Grouped Query Attention (GQA) were proposed by`, 
+      image: 'images/WGQA.png',
+      technologies: ['Deep Learning', 'PyTorch','Transformers'],
+      githubLink: 'https://github.com/Athe-kunal/Enhancement-in-GQA',
+    //   liveLink: 'https://project1live.com', // if applicable
+    },
+
+    {
       name: 'Network Compression using SVD',
       description: `A project employing SVD for effective neural network compression on the MNIST dataset, 
         achieving significant size reduction while maintaining....`,
@@ -45,11 +56,35 @@ const Projects = () => {
         githubLink: 'https://github.com/saisena1998/Speech-Denoising',
       //   liveLink: 'https://project1live.com', // if applicable
       },
+      {
+        name: 'Speaker Verification',
+        description: `Built a Siamese Network to veriy whether two speeches are spoken by the same person or different person.`,
+        image: 'images/siamese.png',
+        technologies: ['Deep Learning','Siamese Network','TensorFlow'],
+        githubLink: 'https://github.com/saisena-ss/Speaker-Verification',
+      //   liveLink: 'https://project1live.com', // if applicable
+      },
+      {
+        name: 'Image Generation using RNN',
+        description: `Generated bottom half of the MNIST digits using first half of the image utilizing LSTM.`,
+        image: 'images/rnn.png',
+        technologies: ['Deep Learning','RNN','Generative AI'],
+        githubLink: 'https://github.com/saisena-ss/Image-Generation-using-RNN',
+      //   liveLink: 'https://project1live.com', // if applicable
+      },
+      {
+        name: 'Image Generation using GAN',
+        description: `Generating realistic handwritten digits using Generative Adversarial Networks (GANs), specifically trained on the MNIST dataset.`,
+        image: 'images/gan.png',
+        technologies: ['Deep Learning','GAN','Generative AI'],
+        githubLink: 'https://github.com/saisena-ss/Image-Generation-using-GAN',
+      //   liveLink: 'https://project1live.com', // if applicable
+      },
   ];
 
   return (
     <Element name="projects" id="projects" className="element"> {/* Use the Element component to wrap your section */}
-  <Box component="section" sx={{ pt: '50px', pb: '5px', px: 10,mb:5}}>
+  <Box component="section" sx={{ pt: '20px', pb: '5px', px: 10,mb:5}}>
       <Typography variant="h4" gutterBottom style={{ fontWeight: 'bold', textAlign: 'left', color: '#43a88a' }}>
         Projects
       </Typography>
