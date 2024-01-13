@@ -9,7 +9,7 @@ import { Element } from 'react-scroll'; // Import Element from react-scroll
 const AboutMe = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const resumeLink = '/resume.pdf'; // Update with the path to your resume
+  const resumeLink = '/Sai_Sena_Resume.pdf'; // Update with the path to your resume
 
 
   return (
