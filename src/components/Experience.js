@@ -7,7 +7,7 @@ const Experience = () => {
   const experiences = [
     {
       title: 'Senior Data Scientist',
-      company: 'Tredence Inc. - Bangalore, India',
+      company: '- Tredence Inc. - Bangalore, India',
       duration: 'Jan 2021 - Jul 2022',
       projects: [
         {
@@ -27,7 +27,7 @@ const Experience = () => {
 
     {
       title: 'Data Scientist',
-      company: 'Tredence Inc. - Bangalore, India',
+      company: '- Tredence Inc. - Bangalore, India',
       duration: 'Jun 2019 - Dec 2020',
       projects: [
         {
@@ -42,8 +42,38 @@ const Experience = () => {
               `Extracted and transformed data from multiple sources to publish customer satisfaction metrics using tableau 
               dashboards for data visualization, streamlining the decision-making process.`,
               `Developed an internal finance tool integrating multiple APIs to generate profitability report, using Flask and React
-              which reduced the manual effort from ~1.5 days to 2 minutes.`],
+              which reduced the manual effort from ~1.5 days to 2 minutes.`,
+              `Constructed a decision tree model to identify the metrics that are most affecting the Online Grocery Pickup 
+customer’s ability to return in the next 30 days and performed sentiment analysisto get more insights, which 
+helped improve customer retention by 1%.`]
         },
+      ],
+    },
+
+    {
+      title: 'Academic Projects',
+      company: '',
+      duration: '',
+      projects: [
+        {
+          name: 'Grade 4 and 5 Math Worksheet Image Classification',
+          points: [
+            `Pre-processed the pdfs and converted into images to extract features using pre-trained EfficientNet.`,
+            `Built hierarchical SVM on top of extracted features to classify images into containing drawing, text or no 
+            text achieving 91% accuracy.`,
+            `Results helped in understanding the impact of different solution strategies on the accuracy of student 
+            responses in mathematics.`
+            ]
+        },
+
+        {
+          name: 'Optical Character Recognition',
+          points: [
+            ` Compared different methods of recognizing words from an image - built Naïve Bayes model to detect each 
+            character independently and a Hidden Markov Model to approximate the posterior distribution.`
+            ]
+        },
+
       ],
     }
   ];
@@ -60,13 +90,13 @@ const Experience = () => {
               <Grid item xs={12} key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             
               <Typography variant="h6" component="h6" style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-                {exp.title} - {exp.company}
+                {exp.title} {exp.company}
               </Typography>
               <Typography variant="subtitle1" color="textSecondary" style={{ marginLeft: '0px' }}>{exp.duration}</Typography>
               </Grid>
               {exp.projects.map((project, projIdx) => (
                 <div key={projIdx}>
-                  {project.name && <Typography variant="subtitle2" style={{ fontWeight: 'bold', marginTop: '1px' }}>
+                  {project.name && <Typography variant="subtitle2" style={{ fontWeight: 'bold'}}>
                     Project: {project.name}
                   </Typography>}
                   <ul>
