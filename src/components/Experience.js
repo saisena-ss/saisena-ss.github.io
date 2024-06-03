@@ -13,7 +13,7 @@ const Experience = () => {
         {
           name: 'Dynamic Order Management',
           points: [
-            `Led a 3-person team, gathered requirements from business clients, and architected a network optimization model to recommend alternate warehouse shipments, saving $700K/month in penalties.`,
+            `Led a 3-person team, gathered requirements from business clients, and architected a network optimization model to recommend alternate warehouse shipments, saving $2M annually in penalties.`,
             `Built data pipelines in Azure data factory for data extraction and transformation, ensuring efficient data flow for model execution.`
           ],
         },
