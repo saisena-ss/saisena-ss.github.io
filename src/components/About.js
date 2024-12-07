@@ -1,15 +1,11 @@
 import React from 'react';
-import { Box, Typography, Container,Grid,Button,Link } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Box, Typography,Grid,Button,Link } from '@mui/material';
 import profileImage from '../images/MyImage.jpg';
 import GetAppIcon from '@mui/icons-material/GetApp'; // Import download icon
 import { Element } from 'react-scroll'; // Import Element from react-scroll
 
 const AboutMe = () => {
-  const theme = useTheme();
-  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const resumeLink = '/Sai_Sena_Resume.pdf'; // Update with the path to your resume
+  const resumeLink = '/Sai_Sena_Resume.pdf'; 
 
 
   return (

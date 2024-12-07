@@ -1,16 +1,9 @@
 import React from 'react';
 import { Box, Typography, Grid, Card, CardActionArea, CardContent, CardMedia, Button,Chip } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import profileImage from '../images/MyImage.jpg';
-import GetAppIcon from '@mui/icons-material/GetApp'; // Import download icon
 import { Element } from 'react-scroll'; // Import Element from react-scroll
 
 const Projects = () => {
-  const theme = useTheme();
-  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const resumeLink = '/resume.pdf'; // Update with the path to your resume
-  
+
   const ellipsisStyle = {
     // whiteSpace: 'nowrap',
     // overflow: 'hidden',

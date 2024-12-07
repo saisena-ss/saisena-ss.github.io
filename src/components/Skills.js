@@ -1,9 +1,5 @@
 import React from 'react';
-import { Box, Typography, Container,Grid,Button,Chip } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import profileImage from '../images/MyImage.jpg';
-import GetAppIcon from '@mui/icons-material/GetApp'; // Import download icon
+import { Box, Typography,Grid,Chip } from '@mui/material';
 import { Element } from 'react-scroll'; // Import Element from react-scroll
 
 const Skills = () => {
@@ -23,10 +19,6 @@ const Skills = () => {
       ];
 
       
-  const theme = useTheme();
-  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
-  const resumeLink = '/resume.pdf'; // Update with the path to your resume
-
 
   return (
     <Element name="skills" id="skills" className="element"> {/* Use the Element component to wrap your section */}

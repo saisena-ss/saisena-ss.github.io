@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography } from '@mui/material';
 import logo from '../images/MyImage.jpg';
 import { Link } from 'react-scroll';
 import '../App.css';
