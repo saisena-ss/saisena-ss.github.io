@@ -15,6 +15,7 @@ function TitleAndFavicon() {
       link.href = "/quizify.webp";
       document.head.appendChild(link);
     } 
+
   }, [location]);
 
   return null; 
@@ -22,7 +23,7 @@ function TitleAndFavicon() {
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <TitleAndFavicon />
       <Routes>
         <Route path="/" element={<MainPage />} />
