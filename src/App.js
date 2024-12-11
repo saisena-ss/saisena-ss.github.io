@@ -1,5 +1,5 @@
 import './App.css';
-import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import InteractiveQuiz from "./components/InteractiveQuiz";
 import { useEffect } from 'react';
