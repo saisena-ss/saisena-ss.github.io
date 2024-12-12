@@ -23,7 +23,7 @@ const InteractiveQuiz = () => {
     const [roundScore, setRoundScore] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [dots, setDots] = useState(''); // State to track the number of dots
-    const baseUrl = 'https://d71a-52-15-143-145.ngrok-free.app';
+    const baseUrl = 'https://d71a-52-15-143-145.ngrok-free.app/';
     // const baseUrl = 'http://127.0.0.1:5000/'
     useEffect(() => {
         const handleTabClose = async (event) => {
