@@ -1,5 +1,5 @@
 import './App.css';
-import { HashRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import InteractiveQuiz from "./components/InteractiveQuiz";
 import { useEffect } from 'react';
@@ -21,9 +21,21 @@ function TitleAndFavicon() {
   return null; 
 }
 
+// function App() {
+//   return (
+//     <Router basename={process.env.PUBLIC_URL}>
+//       <TitleAndFavicon />
+//       <Routes>
+//         <Route path="/" element={<MainPage />} />
+//         <Route path="/quizify.ai" element={<InteractiveQuiz />} />
+//       </Routes>
+//     </Router>
+//   );
+// }
+
 function App() {
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router basename="/saisena-ss.github.io">
       <TitleAndFavicon />
       <Routes>
         <Route path="/" element={<MainPage />} />
@@ -32,5 +44,6 @@ function App() {
     </Router>
   );
 }
+
 
 export default App;
