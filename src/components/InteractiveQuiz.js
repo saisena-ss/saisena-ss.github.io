@@ -1,16 +1,52 @@
 import React, { useRef, useEffect,useState } from "react";
 import { AiOutlineArrowUp,AiOutlineMenu } from 'react-icons/ai'; // Import the up arrow icon
-import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css'; // Import KaTeX CSS
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/default.css'; // Import highlight.js default theme
 import styles from "../styles/styles";
 import { ToastContainer, toast } from 'react-toastify';  // Import ToastContainer and toast
 import 'react-toastify/dist/ReactToastify.css';  // Import the CSS for react-toastify
+import useMarkdownParser from "./useMarkdownProcessor";
+
 
 const InteractiveQuiz = () => {
+    const parseMarkdown = useMarkdownParser();
+
+    // Helper function to process markdown content
+    const processMarkdown = async (jsonData) => {
+        // Extract markdown fields from the JSON data
+        const markdownFields = jsonData.flatMap((item) => {
+            const question = item.question || '';
+            const options = item.options || [];
+            const correctanswer = item.correctanswer || '';
+            const explanation = item.explanation || '';
+            return [question, ...options, correctanswer, explanation];
+        });
+
+        // Process the markdown fields
+        const parsedHtmlArray = await parseMarkdown(markdownFields);
+
+        let htmlIndex = 0; // Index to track the position in the parsedHtmlArray
+        const parsedJsonData = jsonData.map((item) => {
+            const parsedItem = { ...item };
+            if (item.question) {
+                parsedItem.question = parsedHtmlArray[htmlIndex++] || '';
+            }
+            // Parse and assign the options
+            if (item.options) {
+                parsedItem.options = item.options.map(() => parsedHtmlArray[htmlIndex++]) || [];
+            }
+            if (item.correctanswer) {
+                parsedItem.correctanswer = parsedHtmlArray[htmlIndex++] || '';
+            }
+            if (item.explanation) {
+                parsedItem.explanation = parsedHtmlArray[htmlIndex++] || '';
+            }
+            return parsedItem;
+        });
+
+        return parsedJsonData;
+    };
+
     const chatAreaRef = useRef(null);
     const [topic, setTopic] = useState("");
     const [currentQuestions, setCurrentQuestions] = useState([]);
@@ -50,18 +86,18 @@ const InteractiveQuiz = () => {
         };
     }, []);
 
-    const convertKeysToLowerCase = (obj) => {
-        if (Array.isArray(obj)) {
-            return obj.map(convertKeysToLowerCase);
-        } else if (obj !== null && typeof obj === 'object') {
-            return Object.keys(obj).reduce((acc, key) => {
-                const lowerCaseKey = key.toLowerCase();
-                acc[lowerCaseKey] = convertKeysToLowerCase(obj[key]); 
-                return acc;
-            }, {});
-        }
-        return obj;
-    };
+    // const convertKeysToLowerCase = (obj) => {
+    //     if (Array.isArray(obj)) {
+    //         return obj.map(convertKeysToLowerCase);
+    //     } else if (obj !== null && typeof obj === 'object') {
+    //         return Object.keys(obj).reduce((acc, key) => {
+    //             const lowerCaseKey = key.toLowerCase();
+    //             acc[lowerCaseKey] = convertKeysToLowerCase(obj[key]); 
+    //             return acc;
+    //         }, {});
+    //     }
+    //     return obj;
+    // };
 
     const handleTopicChange = (e) => {
         setTopic(e.target.value);
@@ -130,7 +166,7 @@ const InteractiveQuiz = () => {
                 headers['Authorization'] =  jwtToken;
             }
             // console.log(jwtToken);
-            const response = await fetch(`${baseUrl}getresponse`, {
+            let response = await fetch(`${baseUrl}getresponse`, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({ prompt: topicValue }),
@@ -152,10 +188,11 @@ const InteractiveQuiz = () => {
             const token = response.headers.get('Authorization'); 
             localStorage.setItem('jwt', token);
             // Read the streaming response in chunks
-            const reader = response.body.getReader();
+            let reader = response.body.getReader();
             const decoder = new TextDecoder("utf-8");
             let responseData = '';
             let temp = ''
+            let temphtml = '';
             // Process each chunk of the streamed response
             while (true) {
                 const { done, value } = await reader.read();
@@ -171,16 +208,21 @@ const InteractiveQuiz = () => {
                     temp = responseData;
                     if (isValidJson(temp)) {
                         temp = JSON.parse(temp);
-                        setCurrentQuestions(temp);
+                        temphtml = await processMarkdown(temp);
+                        setCurrentQuestions(temphtml);
                     } else if (isValidJson(temp + '"}]')) {
                         temp = JSON.parse(temp + '"}]');
-                        setCurrentQuestions(temp);
+                        temphtml = await processMarkdown(temp);
+                        setCurrentQuestions(temphtml);
                     } else if (isValidJson(temp + "]")) {
                         temp = JSON.parse(temp + "]");
-                        setCurrentQuestions(temp);
+                        temphtml = await processMarkdown(temp);
+                        setCurrentQuestions(temphtml);
+
                     } else if (isValidJson(temp + '"]}]')) {
                         temp = JSON.parse(temp + '"]}]');
-                        setCurrentQuestions(temp);
+                        temphtml = await processMarkdown(temp);
+                        setCurrentQuestions(temphtml);
                     } else {
                         // console.error("Failed to parse accumulated JSON:", responseData);
                     }
@@ -195,13 +237,31 @@ const InteractiveQuiz = () => {
                 }
                 // console.log('responsedata',responseData);
                 let parsedData = JSON.parse(responseData); // Convert the string to an array
+                // console.log('parsed',parsedData);
                 // console.log('Parsed data as array:', convertKeysToLowerCase(parsedData));
-                setCurrentQuestions(convertKeysToLowerCase(parsedData)); // Update the state with the array
+                // setCurrentQuestions(parsedData); // Update the state with the array
+                // Process the markdown content
+                const parsedHtmlArray = await processMarkdown(parsedData);
+                // console.log('hrml',parsedHtmlArray);
+                // Update the state with the parsed HTML data
+                setCurrentQuestions(parsedHtmlArray);
                 // console.log(parsedData);
-                parsedData = '';
-                temp = '';
-                responseData = '';
+                parsedData = null;
+                temp = null;
+                responseData = null;
+                response = null;
+                reader = null;
+                // processedData = '';
             } catch (error) {
+                toast.error("Failed to generate questions, please try again", {
+                    position: "top-right",
+                    autoClose: 5000,  // Auto-close after 3 seconds
+                    // hideProgressBar: true,
+                    closeButton: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+                setCurrentQuestions([]);
                 // console.error('Error parsing JSON response:', error, responseData);
             }
     
@@ -215,6 +275,7 @@ const InteractiveQuiz = () => {
                 pauseOnHover: true,
                 draggable: true,
             });
+            setCurrentQuestions([]);
         } finally {
             setIsGenerating(false); // Set loading state to false
         }
@@ -321,10 +382,12 @@ const InteractiveQuiz = () => {
                             </div>
                         <>
                             {msg.questions &&
-                                msg.questions.map((q) => (
-                                    <div key={q.id} style={styles.questionBlock}>
+                                msg.questions.map((q,idx) => (
+                                    <div key={idx} style={styles.questionBlock}>
                                          <div>
-                                    <strong>Q: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{(q.question)}</ReactMarkdown></strong>
+                                    {/* <strong>Q: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{(q.question)}</ReactMarkdown></strong> */}
+                                    {/* <strong>Q: {(q.question)}</strong> */}
+                                    <strong>Q: <div dangerouslySetInnerHTML={{ __html: q.question }} /></strong>
                                     </div>
                                         {q.options.map((option) => {
                                             const isSelected = q.userAnswer === option;
@@ -342,7 +405,9 @@ const InteractiveQuiz = () => {
                                                             disabled
                                                             style={{ marginRight: "10px" }}
                                                         />
-                                                        <span><ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{option}</ReactMarkdown></span>
+                                                        {/* <span><ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{option}</ReactMarkdown></span> */}
+                                                        {/* <span>{option}</span> */}
+                                                        <div dangerouslySetInnerHTML={{ __html: option }} />
 
                                                         <span style={{ marginLeft: "10px", fontSize: "18px", color: isCorrect ? "green" : "red" }}>
                                                             {icon}
@@ -351,11 +416,12 @@ const InteractiveQuiz = () => {
                                                 </div>
                                             );
                                         })}
-                                        {q.isCorrect ? (
-                                            <div key ={q.id} style={{ color: "green" }}>Explanation: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{q.explanation}</ReactMarkdown></div>
-                                        ) : (
-                                            <div key={q.id} style={{ color: "red" }}>Explanation: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{q.explanation}</ReactMarkdown></div>
-                                        )}
+                                       
+                                       <div key={q.id} style={{ color: q.isCorrect ? "green" : "red" }} 
+                                       dangerouslySetInnerHTML={{ __html: `Explanation: ${q.explanation}` }}
+/>
+                                        {/* <div key ={q.id} style={{ color: q.isCorrect ? "green" :"red" }}>Explanation: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{q.explanation}</ReactMarkdown></div> */}
+                                        
                                     </div>
                                 ))}
                         {/* </div> */}
@@ -378,10 +444,12 @@ const InteractiveQuiz = () => {
                                     {"🤖"}:
                                 </span>{" "}
                             </p>
-                            {currentQuestions.map((q) => (
-                                <div key={q.id} style={styles.questionBlock}>
-                                     <div key='rm'>
-                                    <strong>Q: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeHighlight]}>{(q.question)}</ReactMarkdown></strong>
+                            {currentQuestions.map((q,idx) => (
+                                <div key={idx} style={styles.questionBlock}>
+                                     <div key={idx}>
+                                    {/* <strong>Q: <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex, rehypeHighlight]}>{(q.question)}</ReactMarkdown></strong> */}
+                                    {/* <strong>Q: {(q.question)}</strong> */}
+                                    <strong>Q:<div dangerouslySetInnerHTML={{ __html: q.question }} /></strong>
                                     </div>
                                     {q.options?.map((option) => (
                                         <div key={option} style={{ 
@@ -395,7 +463,9 @@ const InteractiveQuiz = () => {
                                                     onChange={() => handleAnswerChange(q.id, option)}
                                                     style={{ marginRight: "10px" }}
                                                 />
-                                            <span><ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{option}</ReactMarkdown></span>
+                                            {/* <span><ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex,rehypeHighlight]}>{option}</ReactMarkdown></span> */}
+                                            {/* <span>{option}</span> */}
+                                            <div dangerouslySetInnerHTML={{ __html: option }}/>
                                            
                                             </label>
                                         </div>
