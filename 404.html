@@ -1,7 +1,13 @@
-<script>
-  var currentPath = window.location.pathname;
-  var newPath = "/saisena-ss.github.io" + currentPath;
-  if (!currentPath.startsWith("/saisena-ss.github.io")) {
-    window.location.replace(newPath);
-  }
-</script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      // Preserve the original path and redirect to index.html
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      window.location.href = "/index.html" + path;
+    </script>
+  </head>
+  <body>
+    <h1>Redirecting...</h1>
+  </body>
+</html>
